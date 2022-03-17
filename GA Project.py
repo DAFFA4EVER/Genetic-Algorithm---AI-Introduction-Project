@@ -2,18 +2,21 @@ import random
 import math
 
 def generateChromosome():
-    return [(random.randint(-5,5)), (random.randint(-5,5))]
+    return [(random.randint(-10,10)), (random.randint(-10,10))]
 
 def to_binary(n):
-    chromosome = [0,0,0,0]
-    if(n < 0): chromosome[0] = 1
+    t = n
+    chromosome = []
     n = bin(abs(n)).replace("0b", "")
+    for _ in range(0, len(n)+ 1):
+        chromosome.append(0)
     i = len(n)
     g = len(chromosome)
     while(i != 0):
         chromosome[g-1] = int(n[i-1])
         i -= 1
         g -= 1
+    if(t < 0): chromosome[0] = 1
     return chromosome
 
 def to_decimal(chromosome):
@@ -34,20 +37,26 @@ def ChromosomeCombine(chromosome1,chromosome2): #nyatuin chromosome x dan y
     p = []
     if(len(chromosome1) > len(chromosome2)):
         r = len(chromosome1) - len(chromosome2)
-        for i in range(0, r+1):
+        for _ in range(0, r):
             p.append(0)
-        if(chromosome2[0]==1):chromosome2 = chromosome2[:0] + p + chromosome2[1:len(chromosome2)]
-        else : p + chromosome2
-    if(len(chromosome2) > len(chromosome1)):
+        if(chromosome2[0]==1):
+            chromosome2[0] = 0
+            chromosome2 = p + chromosome2
+            chromosome2[0] = 1
+        else : chromosome2 = p + chromosome2
+    elif(len(chromosome2) > len(chromosome1)):
         r = len(chromosome2) - len(chromosome1)
-        for i in range(0, r+1):
+        for _ in range(0, r):
             p.append(0)
-        if(chromosome1[0]==1):chromosome1 = chromosome1[:0] + p + chromosome1[1:len(chromosome1)]
-        else : p + chromosome1
+        if(chromosome1[0]==1):
+            chromosome1[0] = 0
+            chromosome1 = p + chromosome1
+            chromosome1[0] = 1
+        else : chromosome1 = p + chromosome1
         
     return chromosome1 + chromosome2
 
-def ChromoseSplit(chromosome): #misahin chromosome xy
+def ChromosomeSplit(chromosome): #misahin chromosome xy
     return chromosome[:len(chromosome)//2], chromosome[len(chromosome)//2:]
 
 def generatePopulation(n): #buat banyak jenis chromosom
@@ -74,3 +83,17 @@ def fitness(populate):
     return
 
 #Main
+for i in range(0, 10):
+    print(f'{i}---------------------')
+    x, y = generateChromosome()
+    print(x, y)
+    chromosome_x = to_binary(x)
+    chromosome_y = to_binary(y)
+    print(chromosome_x, chromosome_y)
+    chromosome_xy = ChromosomeCombine(chromosome_x, chromosome_y)
+    print(chromosome_xy)
+    chromosome_x, chromosome_y = ChromosomeSplit(chromosome_xy)
+    print(chromosome_x, chromosome_y)
+    x = to_decimal(chromosome_x)
+    y = to_decimal(chromosome_y)
+    print(x, y)
