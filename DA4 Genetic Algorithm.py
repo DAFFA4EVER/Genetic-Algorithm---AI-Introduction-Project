@@ -8,8 +8,7 @@ def generatePhenotype(min, max):
     return random.uniform(min,max)
 
 def float_to_bin(num):
-    global precision
-    return bin(struct.unpack('!I', struct.pack('!f', num))[0])[2:].zfill(int(precision/2))
+    return bin(struct.unpack('!I', struct.pack('!f', num))[0])[2:].zfill(32)
 
 def bin_to_float(binary):
     return struct.unpack('!f',struct.pack('!I', int(binary, 2)))[0]
@@ -52,7 +51,6 @@ def mutation(population, max_population):
 
     return population
 
-
 def stochasticWheel(length, k_value): # probability with sthochastic wheel
     weight = []
     priority = []
@@ -64,16 +62,15 @@ def stochasticWheel(length, k_value): # probability with sthochastic wheel
     return list(set(random.choices(priority, weights=weight, k=k_value)))
 
 def fitness(popu, max_pop, minRange, maxRange): # enters value x, y to get function h result
-    global precision
     for i in range(0, max_pop):
         data = popu[i]['c']
-        x = data[:int(precision/2)]
-        y = data[int(precision/2):precision]
+        x = data[:32]
+        y = data[32:64]
         x = bin_to_float(x), bin_to_float(y)
         if((x not in range(-5,6) and (y not in range(-5,6)))):
             data = to_chromosomeXY(float_to_bin(generatePhenotype(minRange, maxRange)),float_to_bin(generatePhenotype(minRange, maxRange)))
-            x = data[:int(precision/2)]
-            y = data[int(precision/2):precision]
+            x = data[:32]
+            y = data[32:64]
             x, y = bin_to_float(x), bin_to_float(y)
 
         d = dict()
@@ -112,7 +109,6 @@ def survival(value, max_popu,x ,last, minRange, maxRange): # survival
             value[0] = last # assigned the first index to min
             last = last
         #print(f'FIX : {evaluate[0]}\n')
-    
     return value
 
 def evolution(initial_population, max_population : int, max_generation : int, minRange : int, maxRange :int): # For running the simulation
@@ -124,10 +120,10 @@ def evolution(initial_population, max_population : int, max_generation : int, mi
         evaluate = fitness(evaluate, max_population, minRange, maxRange) 
         evaluate = sorting_value(evaluate) # sort from lowest
         choosing = random.choices([0,1], weights=[0.85,0.15], k=1) # Crossover 0.85 Mutation 0.15
-        if(choosing == 1):
+        if(choosing == 0):
             print("Crossover")
             evaluate = crossover(evaluate, max_population)
-        elif(choosing == 0):
+        elif(choosing == 1):
             print("Mutation")
             evaluate = mutation(evaluate, max_population)
         if(x == 0):
@@ -165,14 +161,11 @@ if __name__=="__main__":
     start = time.time() # how long this will take (starting time)
     total_simulation = []
     population = []
-    precision = 64 # bits for binary (fixed value don't change!)
-    if(precision % 2 != 0):
-        precision += 1
     #-----------------Configuration--------------------#
     
-    max_pop = 6 # max kromosom in one populasi
+    max_pop = 20 # max kromosom in one populasi
     
-    max_gen = 120 # max generasi
+    max_gen = 80 # max generasi
     
     minRange = -5 # min domain
     
@@ -194,7 +187,7 @@ if __name__=="__main__":
 The amount of population per-generation = {max_pop}
 Total Generation = {max_gen}
 Domain Range = ({minRange} to {maxRange})
-Binary Precision = {precision} bits""")
+Binary Precision = {64} bits""")
     print(f"""--------------------Smallest is-------------------------------
 X = {final['x']} Y = {final['y']}
 Binary : {final['c']}
