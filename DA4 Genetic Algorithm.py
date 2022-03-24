@@ -2,7 +2,7 @@ import struct # used for decode and encode (important)
 import random # used for generate random value (important)
 import math # used for function h formula (important)
 import time # used for check how long this program take
-import matplotlib.pyplot as plt # used for visualization
+#import matplotlib.pyplot as plt # used for visualization
 
 def generatePhenotype(min, max): 
     return random.uniform(min,max)
@@ -165,7 +165,7 @@ if __name__=="__main__":
     start = time.time() # how long this will take (starting time)
     total_simulation = []
     population = []
-    precision = 64 # bits for binary
+    precision = 64 # bits for binary (fixed value don't change!)
     if(precision % 2 != 0):
         precision += 1
     max_pop = 6 # max kromosom in one populasi
@@ -187,10 +187,10 @@ if __name__=="__main__":
 The amount of population per-generation = {max_pop}
 Total Generation = {max_gen}
 Domain Range = ({minRange} to {maxRange})
-Binary Precision = {precision}bits""")
+Binary Precision = {precision} bits""")
     print(f"""--------------------Smallest is-------------------------------
 X = {final['x']} Y = {final['y']}
 Binary : {final['c']}
 Value : {final['v']}\nValue Rounded : {round_value} \n\nTime Duration = {end-start}s""")
 
-    visualization_2d() # 2d representation of each generation
+    #visualization_2d() # 2d representation of each generation
