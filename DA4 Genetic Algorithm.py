@@ -35,20 +35,24 @@ def crossover(population, max_population):
 
     length = len(population[0]['c'])
     a = random.randint(0, (length-1))
-    b = random.randint(a+1, (length-1))
+    b = random.randint(a, (length-1))
     buffer1 = population[list_cross[0]]['c'][a:b] # target1
     buffer2 = population[list_cross[1]]['c'][a:b] # target2
     population[list_cross[0]]['c'] = population[list_cross[0]]['c'][:a] + buffer2 + population[list_cross[0]]['c'][b:]
     population[list_cross[1]]['c'] = population[list_cross[1]]['c'][:a] + buffer1 + population[list_cross[1]]['c'][b:]
     return population
     
-def mutation(population, max_population):
-    list_cross = stochasticWheel(max_population, 1)
-    length = len(population[0]['v'])
-    for i in range(0, length):
-        if((random.randint(0,1)) == 1):
-            population[list_cross[0]][i] = random.randint(0,1)
 
+def mutation(population, max_population):
+    list_cross = stochasticWheel(max_population, 2)
+    length = len(population[0]['c'])
+    for c in list_cross:
+        i = random.randint(0, length-1)
+        if(population[c]['c'][i] == '1'):
+            population[c]['c'] = population[list_cross[0]]['c'][:i] + '0' + population[list_cross[0]]['c'][i:]
+        else: 
+
+            population[c]['c'] = population[list_cross[0]]['c'][:i] + '1' + population[list_cross[0]]['c'][i:]
     return population
 
 def stochasticWheel(length, k_value): # probability with sthochastic wheel
@@ -119,11 +123,12 @@ def evolution(initial_population, max_population : int, max_generation : int, mi
         #print(f'UNFIX : {evaluate[0]}')
         evaluate = fitness(evaluate, max_population, minRange, maxRange) 
         evaluate = sorting_value(evaluate) # sort from lowest
-        choosing = random.choices([0,1], weights=[0.85,0.15], k=1) # Crossover 0.85 Mutation 0.15
+        choosing = random.choices([0,1], weights=[0.85,0.15], k=1)[0] # Crossover 0.85 Mutation 0.15
         if(choosing == 0):
             print("Crossover")
             evaluate = crossover(evaluate, max_population)
-        elif(choosing == 1):
+        choosing = random.choices([0,1], weights=[0.80,0.20], k=1)[0]
+        if(choosing == 1):
             print("Mutation")
             evaluate = mutation(evaluate, max_population)
         if(x == 0):
