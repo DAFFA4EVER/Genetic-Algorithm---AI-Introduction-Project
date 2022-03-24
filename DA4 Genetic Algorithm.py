@@ -123,11 +123,11 @@ def evolution(initial_population, max_population : int, max_generation : int, mi
         #print(f'UNFIX : {evaluate[0]}')
         evaluate = fitness(evaluate, max_population, minRange, maxRange) 
         evaluate = sorting_value(evaluate) # sort from lowest
-        choosing = random.choices([0,1], weights=[0.85,0.15], k=1)[0] # Crossover 0.85 Mutation 0.15
+        choosing = random.choices([0,1], weights=[0.90,0.10], k=1)[0] # Crossover 0.85 Mutation 0.15
         if(choosing == 0):
             print("Crossover")
             evaluate = crossover(evaluate, max_population)
-        choosing = random.choices([0,1], weights=[0.80,0.20], k=1)[0]
+        choosing = random.choices([0,1], weights=[0.90,0.10], k=1)[0]
         if(choosing == 1):
             print("Mutation")
             evaluate = mutation(evaluate, max_population)
