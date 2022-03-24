@@ -168,18 +168,25 @@ if __name__=="__main__":
     precision = 64 # bits for binary (fixed value don't change!)
     if(precision % 2 != 0):
         precision += 1
+    #-----------------Configuration--------------------#
+    
     max_pop = 6 # max kromosom in one populasi
+    
     max_gen = 120 # max generasi
+    
     minRange = -5 # min domain
+    
     maxRange = 5 # max domain
-    population = createPopulation(population, max_pop, minRange, maxRange) # Create initial population
+    
     print('--------------------SIMULATION BEGIN!--------------------------')
 
-    final_generation = evolution(population, max_pop, max_gen, minRange, maxRange)
+    population = createPopulation(population, max_pop, minRange, maxRange) # Create initial population
+    final_generation = evolution(population, max_pop, max_gen, minRange, maxRange) # BEGIN!!!
     final = final_generation[0] # Final Result
     end = time.time() # how long this will take (ending time)
     round_value = '{0:.15f}'.format(final['v'])
     length = final['c']
+
     print('--------------------SIMULATION STOP!---------------------------')
 
     print(f'Data Representation Example :\n{final}\nv = Heuristic value\nc = Chromosome\nx = X Value\ny = Y value')
