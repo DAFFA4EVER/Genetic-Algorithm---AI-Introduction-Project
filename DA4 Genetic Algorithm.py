@@ -166,6 +166,8 @@ if __name__=="__main__":
     total_simulation = []
     population = []
     precision = 64 # bits for binary
+    if(precision % 2 != 0):
+        precision += 1
     max_pop = 6 # max kromosom in one populasi
     max_gen = 120 # max generasi
     minRange = -5 # min domain
